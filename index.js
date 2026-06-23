@@ -1,11 +1,8 @@
 const qrcode = require('qrcode-terminal');
 const { Client } = require('whatsapp-web.js');
 
-const client = new Client({
-    puppeteer: {
-        executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
-    }
-});
+const client = new Client();
+
 // Generar el codigo QR
 client.on('qr', function(qr) {
     qrcode.generate(qr, {small: true});
