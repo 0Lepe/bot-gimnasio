@@ -14,11 +14,11 @@ async function iniciarBot() {
     // Esto guarda tu sesión en una carpeta para que no te pida escanear a cada rato
     const { state, saveCreds } = await useMultiFileAuthState('sesion_gym_limpia');
 
-    const sock = makeWASocket({
+const sock = makeWASocket({
         auth: state,
         printQRInTerminal: false, 
-        logger: pino({ level: 'silent' }),
-        browser: ['FitLive Elite', 'Chrome', '1.0.0'] // <-- Agrega esta línea
+        logger: pino({ level: 'error' }), // <--- Cambia esto
+        browser: ['FitLive Elite', 'Chrome', '1.0.0']
     });
     // Guardar credenciales automáticamente
     sock.ev.on('creds.update', saveCreds);
@@ -34,14 +34,15 @@ async function iniciarBot() {
         }
 
         // Si se desconecta, intentamos reconectar
-        if (connection === 'close') {
+if (connection === 'close') {
+            // Agrega esta línea para ver al culpable:
+            console.log('🛑 ERROR REAL DEL CIERRE:', lastDisconnect.error); 
+            
             const shouldReconnect = (lastDisconnect.error)?.output?.statusCode !== DisconnectReason.loggedOut;
             console.log('Conexión cerrada. Reconectando...', shouldReconnect);
             if (shouldReconnect) {
                 iniciarBot();
             }
-        } else if (connection === 'open') {
-            console.log('¡ÉXITO! El bot del Gimnasio está listo y operando. Memoria RAM a salvo.');
         }
     });
 
