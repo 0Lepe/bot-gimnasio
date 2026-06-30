@@ -12,14 +12,14 @@ app.listen(port, () => console.log(`Servidor web listo en el puerto ${port}`));
 // 2. Función principal del bot
 async function iniciarBot() {
     // Esto guarda tu sesión en una carpeta para que no te pida escanear a cada rato
-    const { state, saveCreds } = await useMultiFileAuthState('sesion_gimnasio');
+    const { state, saveCreds } = await useMultiFileAuthState('sesion_gym_limpia');
 
     const sock = makeWASocket({
         auth: state,
-        printQRInTerminal: false, // Apagamos el QR feo por defecto
-        logger: pino({ level: 'silent' }) // Silenciamos mensajes innecesarios en la consola
+        printQRInTerminal: false, 
+        logger: pino({ level: 'silent' }),
+        browser: ['FitLive Elite', 'Chrome', '1.0.0'] // <-- Agrega esta línea
     });
-
     // Guardar credenciales automáticamente
     sock.ev.on('creds.update', saveCreds);
 
