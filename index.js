@@ -1,4 +1,4 @@
-const { makeWASocket, useMultiFileAuthState, DisconnectReason } = require('@whiskeysockets/baileys');
+const { makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion } = require('@whiskeysockets/baileys');
 const qrcode = require('qrcode-terminal');
 const express = require('express');
 const pino = require('pino');
@@ -12,12 +12,17 @@ app.listen(port, () => console.log(`Servidor web listo en el puerto ${port}`));
 // 2. Función principal del bot
 async function iniciarBot() {
     // Esto guarda tu sesión en una carpeta para que no te pida escanear a cada rato
-    const { state, saveCreds } = await useMultiFileAuthState('sesion_gym_limpia');
+const { state, saveCreds } = await useMultiFileAuthState('sesion_gym_limpia');
+
+    // --- Agrega estas dos líneas ---
+    const { version } = await fetchLatestBaileysVersion();
+    console.log(`Conectando a WhatsApp v${version.join('.')}...`);
 
 const sock = makeWASocket({
+        version, // <--- Esta es la línea mágica que evita el error 405
         auth: state,
         printQRInTerminal: false, 
-        logger: pino({ level: 'error' }), // <--- Cambia esto
+        logger: pino({ level: 'error' }),
         browser: ['FitLive Elite', 'Chrome', '1.0.0']
     });
     // Guardar credenciales automáticamente
