@@ -56,8 +56,9 @@ client.on('ready', function() {
 
 // 5. Lógica del Menú
 client.on('message', function(message) {
+    console.log('Mensaje detectado:', message.body); // <-- Agrega esta línea
+    
     let textoCliente = message.body.toLowerCase();
-
     if (textoCliente === 'hola' || textoCliente === 'menu' || textoCliente === 'informacion' || textoCliente === 'info') {
         let saludo = "Hola. Bienvenido a Fit Live Elite Gym.\n\nPara darte la informacion correcta, por favor responde con el numero de la opcion que te interese:\n\n1. Horarios y Ubicacion\n2. Precios y Membresias\n3. Instalaciones y Servicios\n4. Hablar con un asesor";
         message.reply(saludo);
